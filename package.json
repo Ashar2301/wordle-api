@@ -8,7 +8,7 @@
     "build": "tsc && node dist/app.js",
     "start:ts": "tsc -w",
     "start:js": "nodemon dist/app.js",
-    "start": "concurrently npm:start:*",
+    "start": "NODE_ENV=dev concurrently npm:start:*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,13 +23,14 @@
   },
   "homepage": "https://github.com/Ashar2301/wordle-api#readme",
   "devDependencies": {
-    "@types/node": "^20.6.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "concurrently": "^8.2.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "mongoose": "^7.5.2",
     "nodemon": "^3.0.1"
   }
 }

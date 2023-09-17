@@ -1,18 +1,19 @@
-import express from 'express'
-import RequestLogger from './utils/RequestLogger.js'
-import ErrorLogger from './utils/ErrorLogger.js'
-import cors from 'cors'
-const app = express();
+import express, { Request, Response } from "express";
+import RequestLogger from "./utils/request-logger.js";
+import ErrorLogger from "./utils/error-logger.js";
+import cors from "cors";
+import collection from "./utils/mongoDB-connection.js";
+import dotenv from "dotenv";
+import loginRoutes from './routes/login.js'
 
+dotenv.config({ path: `./env/.${process.env.NODE_ENV}.env` });
+const app = express();
 console.log("Server Started at port 3000!");
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 
 app.use(RequestLogger);
-app.get("/" , (req , res)=>{
-    console.log('Hi');    
-    res.send('SERVER RUNNING NOW')
-})
-app.use(ErrorLogger)
+app.use('/' , loginRoutes);
+app.use(ErrorLogger);
 
-app.listen(3000);
+app.listen(process.env.DEV_PORT);
