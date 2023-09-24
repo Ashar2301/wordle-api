@@ -1,48 +1,22 @@
-import collection from "../utils/mongoDB-connection.js";
 import express from "express";
-import bcrypt from "bcrypt";
+import loginService from "../services/login.js";
 const router = express.Router();
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req, res, next) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const data = {
-            email: req.body.email,
-            name: req.body.name,
-            password: hashedPassword,
-        };
-        console.log(data);
-        let model = await collection.getUserCollection();
-        let response = await model.create(data);
-        if (response) {
-            res.status(200).json(response);
-        }
-        else {
-            res.status(500).send("Error creating document");
-        }
+        let response = await loginService.createUser(req.body.email, req.body.name, req.body.password);
+        res.status(response.code).json(response.response);
     }
     catch (e) {
-        console.log(e);
-        res.status(500).send("Error creating document");
+        next(e);
     }
 });
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
     try {
-        let model = await collection.getUserCollection();
-        let response = await model.findOne({ email: req.body.email });
-        if (response) {
-            if (await bcrypt.compare(req.body.password, response.password)) {
-                res.status(200).send("Login successfull");
-            }
-            else {
-                res.status(401).send("Invalid credentials");
-            }
-        }
-        else {
-            res.status(404).send("User not found");
-        }
+        let response = await loginService.loginUser(req.body.email, req.body.password);
+        res.status(response.code).json(response.response);
     }
-    catch {
-        res.status(401).send("Error loggin in");
+    catch (e) {
+        next(e);
     }
 });
 export default router;

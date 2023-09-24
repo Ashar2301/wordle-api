@@ -5,6 +5,7 @@ import cors from "cors";
 import collection from "./utils/mongoDB-connection.js";
 import dotenv from "dotenv";
 import loginRoutes from './routes/login.js'
+import dailyRoutes from './routes/daily.js'
 
 dotenv.config({ path: `./env/.${process.env.NODE_ENV}.env` });
 const app = express();
@@ -14,6 +15,7 @@ app.use(cors());
 
 app.use(RequestLogger);
 app.use('/' , loginRoutes);
+app.use('/daily',dailyRoutes);
 app.use(ErrorLogger);
 
 app.listen(process.env.DEV_PORT);
