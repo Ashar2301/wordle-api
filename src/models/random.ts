@@ -1,22 +1,26 @@
 import collection from "../utils/mongoDB-connection.js";
 import { words } from "../constants/five-letter-words.js";
-import { IDailyGames, IUserStatistics } from "../interfaces/user-statistics.js";
-const dailyDB: any = {};
+import {
+  IRandomGames,
+  IUserStatistics,
+} from "../interfaces/user-statistics.js";
 
-dailyDB.generateGame = async (email: string) => {
-  const isRecordExists = await dailyDB.findUserByEmail(email);
+const randomDB: any = {};
+
+randomDB.generateGame = async (email: string) => {
+  const isRecordExists = await randomDB.findUserByEmail(email);
   if (isRecordExists) {
-    let updateDocument = await dailyDB.updateDailyArray(email);
+    let updateDocument = await randomDB.updateRandomArray(email);
     if (updateDocument) {
       return { code: 200, response: updateDocument };
     } else {
       return { code: 500, response: "Error generating game session" };
     }
   } else {
-    let document = await dailyDB.addUserFirstDocument(email);
+    let document = await randomDB.addUserFirstDocument(email);
 
     if (document) {
-      let updateDocument = await dailyDB.updateDailyArray(email);
+      let updateDocument = await randomDB.updateRandomArray(email);
       if (updateDocument) {
         return { code: 200, response: updateDocument };
       } else {
@@ -27,8 +31,7 @@ dailyDB.generateGame = async (email: string) => {
     }
   }
 };
-
-dailyDB.registerAttempts = async (
+randomDB.registerAttempts = async (
   userEmail: string,
   gameID: number,
   attempt: Array<any>,
@@ -36,20 +39,20 @@ dailyDB.registerAttempts = async (
 ) => {
   const answerWord = words[gameID];
   let model = await collection.getUserStatisticsCollection();
-  let coloredLetters = dailyDB.colorTheLetters(answerWord, attempt);
-  if (dailyDB.checkIfWordleSolved(attempt, answerWord)) {
+  let coloredLetters = randomDB.colorTheLetters(answerWord, attempt);
+  if (randomDB.checkIfWordleSolved(attempt, answerWord)) {
     await model.findOneAndUpdate(
       {
         email: userEmail,
       },
       {
         $set: {
-          "dailyGames.$[game].solved": true,
-          "dailyGames.$[game].solvedInAttempts": attemptNumber,
+          "randomGames.$[game].solved": true,
+          "randomGames.$[game].solvedInAttempts": attemptNumber,
         },
         $push: {
-          "dailyGames.$[game].attempts.letters": attempt,
-          "dailyGames.$[game].attempts.colors": coloredLetters,
+          "randomGames.$[game].attempts.letters": attempt,
+          "randomGames.$[game].attempts.colors": coloredLetters,
         },
       },
       {
@@ -66,8 +69,8 @@ dailyDB.registerAttempts = async (
       },
       {
         $push: {
-          "dailyGames.$[game].attempts.letters": attempt,
-          "dailyGames.$[game].attempts.colors": coloredLetters,
+          "randomGames.$[game].attempts.letters": attempt,
+          "randomGames.$[game].attempts.colors": coloredLetters,
         },
       },
       {
@@ -75,19 +78,17 @@ dailyDB.registerAttempts = async (
         new: true,
       }
     );
+
     // return resp;
   }
 
   return { code: 200, response: coloredLetters };
 };
-dailyDB.updateDailyArray = async (email: string) => {
+randomDB.updateRandomArray = async (email: string) => {
   let model = await collection.getUserStatisticsCollection();
-  const index = dailyDB.getIndexForWord();
-  let gameExists = await dailyDB.gameAlreadyExists(email, index);
-  if (gameExists !== -1) {
-    return gameExists;
-  }
-  const objToUpdate: IDailyGames = {
+  const index = await randomDB.getIndexForWord(email);
+
+  const objToUpdate: IRandomGames = {
     date: new Date().toLocaleString(),
     _id: index,
     solved: false,
@@ -99,46 +100,48 @@ dailyDB.updateDailyArray = async (email: string) => {
   };
   await model.findOneAndUpdate(
     { email: email },
-    { $push: { dailyGames: objToUpdate } },
+    { $push: { randomGames: objToUpdate } },
     { new: true }
   );
 
   return objToUpdate;
 };
 
-dailyDB.gameAlreadyExists = async (email: string, id: number) => {
+randomDB.gameAlreadyExists = async (email: string, id: number) => {
   let model = await collection.getUserStatisticsCollection();
   let resp = await model.findOne({ email: email });
-  let index = resp.dailyGames.findIndex((game) => game._id === id);
+  let index = resp?.randomGames?.findIndex((game) => game._id === id);
   if (index !== -1) {
-    return resp.dailyGames[index];
+    return resp.randomGames[index];
   } else return -1;
 };
-dailyDB.addUserFirstDocument = async (email: string) => {
+randomDB.addUserFirstDocument = async (email: string) => {
   let model = await collection.getUserStatisticsCollection();
   const objToPush: IUserStatistics = {
     email: email,
-    dailyGames: [],
     randomGames: [],
+    dailyGames: [],
   };
   return await model.create(objToPush);
 };
-dailyDB.getIndexForWord = () => {
-  const targetDate = new Date();
-  const currentDate = new Date("2023-10-28");
+randomDB.getIndexForWord = async (email: string) => {
+  let index = Math.floor(Math.random() * (words.length - 1 - 0) + 0);
 
-  const timeDifference = targetDate.getTime() - currentDate.getTime();
-  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  while (true) {
+    let resp = await randomDB.gameAlreadyExists(email, index);
+    if (resp === -1) break;
+    index = Math.floor(Math.random() * (words.length - 1 - 0) + 0);
+  }
 
-  return daysDifference;
+  return index;
 };
 
-dailyDB.findUserByEmail = async (userEmail: string) => {
+randomDB.findUserByEmail = async (userEmail: string) => {
   let model = await collection.getUserStatisticsCollection();
   return await model.findOne({ email: userEmail });
 };
 
-dailyDB.colorTheLetters = (answerWord: string, attempt: any[]) => {
+randomDB.colorTheLetters = (answerWord: string, attempt: any[]) => {
   let countMap: any[] = [];
   let colorArray: string[] = [];
   for (let i = 0; i < answerWord.length; i++) {
@@ -168,11 +171,11 @@ dailyDB.colorTheLetters = (answerWord: string, attempt: any[]) => {
 
   return colorArray;
 };
-dailyDB.checkIfWordleSolved = (word: Array<any>, answerWord: string) => {
-  if (answerWord === dailyDB.returnWordFromArray(word)) return true;
+randomDB.checkIfWordleSolved = (word: Array<any>, answerWord: string) => {
+  if (answerWord === randomDB.returnWordFromArray(word)) return true;
   return false;
 };
-dailyDB.returnWordFromArray = (word: Array<any>): string => {
+randomDB.returnWordFromArray = (word: Array<any>): string => {
   let retWord: string = "";
   word.forEach((elm) => {
     retWord += elm;
@@ -180,4 +183,4 @@ dailyDB.returnWordFromArray = (word: Array<any>): string => {
   return retWord.toLowerCase();
 };
 
-export default dailyDB;
+export default randomDB;

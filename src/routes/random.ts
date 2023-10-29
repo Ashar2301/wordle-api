@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import express from "express";
-import dailyService from "../services/daily.js";
+import randomService from "../services/random.js";
 
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response, next: Request) => {
   try {
     const email: string = req.query.email;
-    let resp = await dailyService.generateGame(email);
+    let resp = await randomService.generateGame(email);
     res.status(200).json(resp.response);
   } catch (e) {
     next(e);
@@ -16,7 +16,7 @@ router.get("/", async (req: Request, res: Response, next: Request) => {
 
 router.post("/attempt", async (req: Request, res: Response, next: Request) => {
   try {
-    let resp = await dailyService.registerAttempts(
+    let resp = await randomService.registerAttempts(
       req.body.email,
       req.body.gameID,
       req.body.attempt,

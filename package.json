@@ -8,7 +8,7 @@
     "build": "tsc && node dist/app.js",
     "start:ts": "tsc -w",
     "start:js": "nodemon dist/app.js",
-    "start": "NODE_ENV=dev concurrently npm:start:*",
+    "start": "set NODE_ENV=dev&& concurrently npm:start:*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

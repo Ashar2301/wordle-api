@@ -2,6 +2,7 @@ import express from "express";
 import loginService from "../services/login.js";
 const router = express.Router();
 router.post("/signup", async (req, res, next) => {
+    console.log(req.body, 'here');
     try {
         let response = await loginService.createUser(req.body.email, req.body.name, req.body.password);
         res.status(response.code).json(response.response);

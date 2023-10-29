@@ -6,7 +6,9 @@ import { ICustomResponse } from "../interfaces/custom-response.js";
 const router = express.Router();
 
 router.post("/signup", async (req: Request, res: Response, next: Request) => {
+  console.log(req.body , 'here');
   try {
+    
     let response: ICustomResponse = await loginService.createUser(
       req.body.email,
       req.body.name,
