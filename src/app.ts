@@ -28,3 +28,5 @@ app.use("/stats", statsRoutes);
 app.use(ErrorLogger);
 
 app.listen(process.env.DEV_PORT);
+
+export default app;
