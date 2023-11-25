@@ -4,17 +4,19 @@ import {
   IStatisticsObject,
   IUserStatistics,
 } from "../interfaces/user-statistics.js";
-
+import { words } from "../constants/five-letter-words.js";
 const statsDB: any = {};
 
 statsDB.getDailyStats = async (email: string) => {
   let user: IUserStatistics = await statsDB.findUserByEmail(email);
+  if (!user) return { code: 404, response: "User not found" };
   let games = user.dailyGames;
   let stats: IStatisticsObject = statsDB.returnStats(games);
   return { code: 200, response: stats };
 };
 statsDB.getRandomStats = async (email: string) => {
   let user: IUserStatistics = await statsDB.findUserByEmail(email);
+  if (!user) return { code: 404, response: "User not found" };
   let games = user.randomGames;
   let stats: IStatisticsObject = statsDB.returnStats(games);
   return { code: 200, response: stats };
@@ -43,12 +45,36 @@ statsDB.returnStats = (games: any[]): IStatisticsObject => {
     currentStreak,
     guessDistribution,
   };
-  console.log(userStats);
 
   return userStats;
 };
 statsDB.findUserByEmail = async (userEmail: string) => {
   let model = await collection.getUserStatisticsCollection();
   return await model.findOne({ email: userEmail });
+};
+
+statsDB.returnAnswerWord = async (
+  gameId: number,
+  email: string,
+  gameType: string
+) => {
+  let user: IUserStatistics = await statsDB.findUserByEmail(email);
+  if (!user) return { code: 404, response: "User not found" };
+  let games: any[] = [];
+  if (gameType === "RANDOM") games = user.randomGames;
+  else if (gameType === "DAILY") games = user.dailyGames;
+  let flag: boolean = false;
+  games.forEach((elm: any) => {
+    if (
+      elm._id == gameId &&
+      elm.solved === false &&
+      elm.attempts.letters.length === 6
+    ) {
+      flag = true;
+      return;
+    }
+  });
+  if (flag) return { code: 200, response: words[gameId] };
+  return { code: 404, response: "Game not found" };
 };
 export default statsDB;

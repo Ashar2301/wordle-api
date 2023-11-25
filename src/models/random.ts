@@ -7,10 +7,10 @@ import {
 
 const randomDB: any = {};
 
-randomDB.generateGame = async (email: string) => {
+randomDB.generateGame = async (email: string, hardMode: boolean) => {
   const isRecordExists = await randomDB.findUserByEmail(email);
   if (isRecordExists) {
-    let updateDocument = await randomDB.updateRandomArray(email);
+    let updateDocument = await randomDB.updateRandomArray(email, hardMode);
     if (updateDocument) {
       return { code: 200, response: updateDocument };
     } else {
@@ -20,7 +20,7 @@ randomDB.generateGame = async (email: string) => {
     let document = await randomDB.addUserFirstDocument(email);
 
     if (document) {
-      let updateDocument = await randomDB.updateRandomArray(email);
+      let updateDocument = await randomDB.updateRandomArray(email, hardMode);
       if (updateDocument) {
         return { code: 200, response: updateDocument };
       } else {
@@ -84,13 +84,14 @@ randomDB.registerAttempts = async (
 
   return { code: 200, response: coloredLetters };
 };
-randomDB.updateRandomArray = async (email: string) => {
+randomDB.updateRandomArray = async (email: string, hardMode: any) => {
   let model = await collection.getUserStatisticsCollection();
   const index = await randomDB.getIndexForWord(email);
 
   const objToUpdate: IRandomGames = {
     date: new Date().toLocaleString(),
     _id: index,
+    hardMode: hardMode === "true" ? true : false,
     solved: false,
     solvedInAttempts: -1,
     attempts: {
@@ -134,6 +135,7 @@ randomDB.getIndexForWord = async (email: string) => {
   }
 
   return index;
+  // return 6154
 };
 
 randomDB.findUserByEmail = async (userEmail: string) => {

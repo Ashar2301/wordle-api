@@ -1,10 +1,10 @@
 import collection from "../utils/mongoDB-connection.js";
 import { words } from "../constants/five-letter-words.js";
 const dailyDB = {};
-dailyDB.generateGame = async (email) => {
+dailyDB.generateGame = async (email, hardMode) => {
     const isRecordExists = await dailyDB.findUserByEmail(email);
     if (isRecordExists) {
-        let updateDocument = await dailyDB.updateDailyArray(email);
+        let updateDocument = await dailyDB.updateDailyArray(email, hardMode);
         if (updateDocument) {
             return { code: 200, response: updateDocument };
         }
@@ -15,7 +15,7 @@ dailyDB.generateGame = async (email) => {
     else {
         let document = await dailyDB.addUserFirstDocument(email);
         if (document) {
-            let updateDocument = await dailyDB.updateDailyArray(email);
+            let updateDocument = await dailyDB.updateDailyArray(email, hardMode);
             if (updateDocument) {
                 return { code: 200, response: updateDocument };
             }
@@ -66,7 +66,7 @@ dailyDB.registerAttempts = async (userEmail, gameID, attempt, attemptNumber) => 
     }
     return { code: 200, response: coloredLetters };
 };
-dailyDB.updateDailyArray = async (email) => {
+dailyDB.updateDailyArray = async (email, hardMode) => {
     let model = await collection.getUserStatisticsCollection();
     const index = dailyDB.getIndexForWord();
     let gameExists = await dailyDB.gameAlreadyExists(email, index);
@@ -76,6 +76,7 @@ dailyDB.updateDailyArray = async (email) => {
     const objToUpdate = {
         date: new Date().toLocaleString(),
         _id: index,
+        hardMode,
         solved: false,
         solvedInAttempts: -1,
         attempts: {

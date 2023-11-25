@@ -3,10 +3,10 @@ import { words } from "../constants/five-letter-words.js";
 import { IDailyGames, IUserStatistics } from "../interfaces/user-statistics.js";
 const dailyDB: any = {};
 
-dailyDB.generateGame = async (email: string) => {
+dailyDB.generateGame = async (email: string, hardMode: boolean) => {
   const isRecordExists = await dailyDB.findUserByEmail(email);
   if (isRecordExists) {
-    let updateDocument = await dailyDB.updateDailyArray(email);
+    let updateDocument = await dailyDB.updateDailyArray(email, hardMode);
     if (updateDocument) {
       return { code: 200, response: updateDocument };
     } else {
@@ -16,7 +16,7 @@ dailyDB.generateGame = async (email: string) => {
     let document = await dailyDB.addUserFirstDocument(email);
 
     if (document) {
-      let updateDocument = await dailyDB.updateDailyArray(email);
+      let updateDocument = await dailyDB.updateDailyArray(email, hardMode);
       if (updateDocument) {
         return { code: 200, response: updateDocument };
       } else {
@@ -80,7 +80,7 @@ dailyDB.registerAttempts = async (
 
   return { code: 200, response: coloredLetters };
 };
-dailyDB.updateDailyArray = async (email: string) => {
+dailyDB.updateDailyArray = async (email: string, hardMode: boolean) => {
   let model = await collection.getUserStatisticsCollection();
   const index = dailyDB.getIndexForWord();
   let gameExists = await dailyDB.gameAlreadyExists(email, index);
@@ -90,6 +90,7 @@ dailyDB.updateDailyArray = async (email: string) => {
   const objToUpdate: IDailyGames = {
     date: new Date().toLocaleString(),
     _id: index,
+    hardMode,
     solved: false,
     solvedInAttempts: -1,
     attempts: {

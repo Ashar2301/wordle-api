@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { User } from "./schemas/user.schema.js";
 import { UserStatistics } from './schemas/user-statistics.schema.js';
 dotenv.config({ path: `./env/.${process.env.NODE_ENV}.env` });
-const url = process.env.LOCAL_DATABASE_URL;
+const url = process.env.DEPLOYED_DATABASE_URL;
 mongoose.Promise = global.Promise;
 const userSchema = User;
 const userStatisticsSchema = UserStatistics;

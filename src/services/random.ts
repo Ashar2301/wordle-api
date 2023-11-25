@@ -2,8 +2,8 @@ import randomDB from "../models/random.js";
 
 const randomService: any = {};
 
-randomService.generateGame = async (email: string) => {
-  return randomDB.generateGame(email);
+randomService.generateGame = async (email: string, hardMode: boolean) => {
+  return randomDB.generateGame(email, hardMode);
 };
 
 randomService.registerAttempts = async (

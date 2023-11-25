@@ -7,6 +7,7 @@ export interface IUserStatistics {
 export interface IRandomGames {
   date            : string;
   _id             : string;
+  hardMode        : boolean;
   solved          : boolean;
   solvedInAttempts: number;
   attempts        : {
@@ -18,6 +19,7 @@ export interface IRandomGames {
 export interface IDailyGames {
   date            : string;
   _id             : string;
+  hardMode        : boolean;
   solved          : boolean;
   solvedInAttempts: number;
   attempts        : {

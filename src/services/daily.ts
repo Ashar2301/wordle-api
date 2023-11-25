@@ -2,8 +2,8 @@ import dailyDB from "../models/daily.js";
 
 const dailyService: any = {};
 
-dailyService.generateGame = async (email: string) => {
-  return dailyDB.generateGame(email);
+dailyService.generateGame = async (email: string, hardMode: boolean) => {
+  return dailyDB.generateGame(email, hardMode);
 };
 
 dailyService.registerAttempts = async (

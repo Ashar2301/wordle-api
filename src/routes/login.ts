@@ -2,13 +2,12 @@ import { Request, Response } from "express";
 import express from "express";
 import loginService from "../services/login.js";
 import { ICustomResponse } from "../interfaces/custom-response.js";
-
+import jwt from "jsonwebtoken";
+import jwtService from "../services/jwt.js";
 const router = express.Router();
 
 router.post("/signup", async (req: Request, res: Response, next: Request) => {
-  console.log(req.body , 'here');
   try {
-    
     let response: ICustomResponse = await loginService.createUser(
       req.body.email,
       req.body.name,
@@ -26,6 +25,9 @@ router.post("/login", async (req: Request, res: Response, next: Request) => {
       req.body.email,
       req.body.password
     );
+    let email = req.body.email;
+    const accessToken = jwtService.generateAccessToken({ email });
+    res.set("authorization", accessToken);
     res.status(response.code).json(response.response);
   } catch (e) {
     next(e);
