@@ -1,20 +1,20 @@
-import fs from 'fs'
+import fs from "fs";
 const errorLogger = function (err, req, res, next) {
-    if (err) {
-        fs.appendFile('ErrorLogger.txt',new Date().toLocaleString()+" : "+ err.stack + "\n" , (error) => {
-            if (error) {
-                console.log("logging error failed");
-            }
-        });
-        if(err.status) {
-          res.status(err.status);
-        }
-        else {
-          res.status(500);
-        }
-        res.json({ "message": err.message })
+  if (err) {
+    console.log("error ==>", err);
+    // fs.appendFile('ErrorLogger.txt',new Date().toLocaleString()+" : "+ err.stack + "\n" , (error) => {
+    //     if (error) {
+    //         console.log("logging error failed");
+    //     }
+    // });
+    if (err.status) {
+      res.status(err.status);
+    } else {
+      res.status(500);
     }
-    next();
-}
+    res.json({ message: err.message });
+  }
+  next();
+};
 
 export default errorLogger;

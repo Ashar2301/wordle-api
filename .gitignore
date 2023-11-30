@@ -2,3 +2,4 @@ node_modules
 dist
 ErrorLogger.txt
 RequestLogger.txt
+.vercel
