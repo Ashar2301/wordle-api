@@ -80,7 +80,7 @@ dailyDB.registerAttempts = async (
 
   return { code: 200, response: coloredLetters };
 };
-dailyDB.updateDailyArray = async (email: string, hardMode: boolean) => {
+dailyDB.updateDailyArray = async (email: string, hardMode: any) => {
   let model = await collection.getUserStatisticsCollection();
   const index = dailyDB.getIndexForWord();
   let gameExists = await dailyDB.gameAlreadyExists(email, index);
@@ -90,7 +90,7 @@ dailyDB.updateDailyArray = async (email: string, hardMode: boolean) => {
   const objToUpdate: IDailyGames = {
     date: new Date().toLocaleString(),
     _id: index,
-    hardMode,
+    hardMode: hardMode === "true" ? true : false,
     solved: false,
     solvedInAttempts: -1,
     attempts: {

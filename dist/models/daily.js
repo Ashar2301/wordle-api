@@ -76,7 +76,7 @@ dailyDB.updateDailyArray = async (email, hardMode) => {
     const objToUpdate = {
         date: new Date().toLocaleString(),
         _id: index,
-        hardMode,
+        hardMode: hardMode === "true" ? true : false,
         solved: false,
         solvedInAttempts: -1,
         attempts: {
