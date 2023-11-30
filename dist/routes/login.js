@@ -23,5 +23,13 @@ router.post("/login", async (req, res, next) => {
         next(e);
     }
 });
+router.get("/test", async (req, res, next) => {
+    try {
+        res.status(200).json('Hello World');
+    }
+    catch (e) {
+        next(e);
+    }
+});
 export default router;
 //# sourceMappingURL=login.js.map

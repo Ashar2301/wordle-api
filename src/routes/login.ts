@@ -33,5 +33,13 @@ router.post("/login", async (req: Request, res: Response, next: Request) => {
     next(e);
   }
 });
+router.get("/test", async (req: Request, res: Response, next: Request) => {
+  try {
+    
+    res.status(200).json('Hello World');
+  } catch (e) {
+    next(e);
+  }
+});
 
 export default router;
