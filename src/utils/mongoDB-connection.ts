@@ -1,7 +1,7 @@
-import mongoose, { ConnectOptions } from "mongoose";
 import dotenv from "dotenv";
+import mongoose, { ConnectOptions } from "mongoose";
+import { UserStatistics } from './schemas/user-statistics.schema.js';
 import { User } from "./schemas/user.schema.js";
-import {UserStatistics} from './schemas/user-statistics.schema.js'
 
 dotenv.config({ path: `./env/.${process.env.NODE_ENV}.env` });
 

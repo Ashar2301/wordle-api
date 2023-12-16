@@ -1,4 +1,3 @@
-import fs from "fs";
 
 const requestLogger = (req, res, next) => {
   console.log("Request method is ", req.method);

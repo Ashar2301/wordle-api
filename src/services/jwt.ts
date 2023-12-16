@@ -1,22 +1,23 @@
+import { Response } from "express";
 import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
 const jwtService: any = {};
 
 jwtService.generateAccessToken = (user: any) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "59m" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "10s" });
 };
 jwtService.generateRefreshToken = (user: any) => {
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
 };
-jwtService.authenticateToken = (req: Request, res: Response, next: Request) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  
+jwtService.authenticateToken = (req: any, res: Response, next: any) => {
+  const token = req.cookies.token;
   if (token == null) return res.status(401).json("Invalid token");
 
-
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.status(403).json("Token expired. Log in again");
+    if (err) {
+      res.clearCookie("token");
+      return res.status(403).json("Token expired. Log in again");
+    }
+    console.log(user)
     req.user = user;
 
     next();

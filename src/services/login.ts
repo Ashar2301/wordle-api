@@ -1,5 +1,4 @@
 import loginDB from "../models/login.js";
-import jwt from 'jsonwebtoken'
 
 const loginService: any = {};
 

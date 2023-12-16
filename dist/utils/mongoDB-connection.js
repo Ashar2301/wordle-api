@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { User } from "./schemas/user.schema.js";
+import mongoose from "mongoose";
 import { UserStatistics } from './schemas/user-statistics.schema.js';
+import { User } from "./schemas/user.schema.js";
 dotenv.config({ path: `./env/.${process.env.NODE_ENV}.env` });
 const url = process.env.DEPLOYED_DATABASE_URL;
 mongoose.Promise = global.Promise;

@@ -1,10 +1,9 @@
-import collection from "../utils/mongoDB-connection.js";
-import {
-  IDailyGames,
-  IStatisticsObject,
-  IUserStatistics,
-} from "../interfaces/user-statistics.js";
 import { words } from "../constants/five-letter-words.js";
+import {
+  IStatisticsObject,
+  IUserStatistics
+} from "../interfaces/user-statistics.js";
+import collection from "../utils/mongoDB-connection.js";
 const statsDB: any = {};
 
 statsDB.getDailyStats = async (email: string) => {

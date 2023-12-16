@@ -1,5 +1,5 @@
-import collection from "../utils/mongoDB-connection.js";
 import bcrypt from "bcrypt";
+import collection from "../utils/mongoDB-connection.js";
 const loginDB = {};
 loginDB.loginUser = async (userEmail, userPassword) => {
     try {

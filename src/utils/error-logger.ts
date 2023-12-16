@@ -1,4 +1,3 @@
-import fs from "fs";
 const errorLogger = function (err, req, res, next) {
   if (err) {
     console.log("error ==>", err);

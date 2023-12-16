@@ -1,9 +1,9 @@
-import collection from "../utils/mongoDB-connection.js";
 import { words } from "../constants/five-letter-words.js";
 import {
   IRandomGames,
   IUserStatistics,
 } from "../interfaces/user-statistics.js";
+import collection from "../utils/mongoDB-connection.js";
 
 const randomDB: any = {};
 

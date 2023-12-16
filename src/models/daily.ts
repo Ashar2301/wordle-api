@@ -1,6 +1,6 @@
-import collection from "../utils/mongoDB-connection.js";
 import { words } from "../constants/five-letter-words.js";
 import { IDailyGames, IUserStatistics } from "../interfaces/user-statistics.js";
+import collection from "../utils/mongoDB-connection.js";
 const dailyDB: any = {};
 
 dailyDB.generateGame = async (email: string, hardMode: boolean) => {

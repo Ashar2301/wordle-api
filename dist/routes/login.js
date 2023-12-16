@@ -1,6 +1,6 @@
 import express from "express";
-import loginService from "../services/login.js";
 import jwtService from "../services/jwt.js";
+import loginService from "../services/login.js";
 const router = express.Router();
 router.post("/signup", async (req, res, next) => {
     try {
@@ -15,8 +15,12 @@ router.post("/login", async (req, res, next) => {
     try {
         let response = await loginService.loginUser(req.body.email, req.body.password);
         let email = req.body.email;
-        const accessToken = jwtService.generateAccessToken({ email });
-        res.set("authorization", accessToken);
+        if (response.code === 200) {
+            const accessToken = jwtService.generateAccessToken({
+                email
+            });
+            res.cookie("token", accessToken, { httpOnly: true });
+        }
         res.status(response.code).json(response.response);
     }
     catch (e) {
@@ -25,7 +29,7 @@ router.post("/login", async (req, res, next) => {
 });
 router.get("/test", async (req, res, next) => {
     try {
-        res.status(200).json('Hello World');
+        res.status(200).json("Hello World");
     }
     catch (e) {
         next(e);

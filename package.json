@@ -10,7 +10,7 @@
     "start:js": "nodemon dist/app.js",
     "start": "set NODE_ENV=dev&& concurrently npm:start:*",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build" : "echo hello"
+    "vercel-build": "echo hello"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,14 @@
   },
   "homepage": "https://github.com/Ashar2301/wordle-api#readme",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.6",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.1.1",
     "concurrently": "^8.2.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

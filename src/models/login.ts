@@ -1,7 +1,7 @@
+import bcrypt from "bcrypt";
 import { ICustomResponse } from "../interfaces/custom-response.js";
 import { IUser } from "../interfaces/user.js";
 import collection from "../utils/mongoDB-connection.js";
-import bcrypt from "bcrypt";
 
 const loginDB: any = {};
 

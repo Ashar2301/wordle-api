@@ -1,5 +1,5 @@
-import collection from "../utils/mongoDB-connection.js";
 import { words } from "../constants/five-letter-words.js";
+import collection from "../utils/mongoDB-connection.js";
 const dailyDB = {};
 dailyDB.generateGame = async (email, hardMode) => {
     const isRecordExists = await dailyDB.findUserByEmail(email);
