@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const jwtService: any = {};
 
 jwtService.generateAccessToken = (user: any) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "10s" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 };
 jwtService.generateRefreshToken = (user: any) => {
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
@@ -17,7 +17,6 @@ jwtService.authenticateToken = (req: any, res: Response, next: any) => {
       res.clearCookie("token");
       return res.status(403).json("Token expired. Log in again");
     }
-    console.log(user)
     req.user = user;
 
     next();

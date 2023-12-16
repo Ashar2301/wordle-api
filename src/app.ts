@@ -14,7 +14,12 @@ const app = express();
 console.log(`Server Started at port ${process.env.DEV_PORT} !`);
 
 app.use(express.json());
-app.use(cors({credentials:true , origin : 'http://localhost:4200'}));
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:4200", "https://wordle-api-five.vercel.app"],
+  })
+);
 app.use(cookieParser());
 
 app.use(RequestLogger);
