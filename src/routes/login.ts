@@ -32,6 +32,7 @@ router.post("/login", async (req: Request, res: Response, next: any) => {
       });
       res.cookie("token", accessToken, {
         httpOnly: true,
+        sameSite: "none",
         expires: rememberMe
           ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           : undefined,
@@ -67,7 +68,7 @@ router.get(
       let response: ICustomResponse = await loginService.returnUserCreds(
         req.user.email
       );
-      console.log(response)
+      console.log(response);
       res.status(response.code).json(response.response);
     } catch (e) {
       next(e);
