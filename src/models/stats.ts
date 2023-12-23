@@ -1,7 +1,7 @@
 import { words } from "../constants/five-letter-words.js";
 import {
   IStatisticsObject,
-  IUserStatistics
+  IUserStatistics,
 } from "../interfaces/user-statistics.js";
 import collection from "../utils/mongoDB-connection.js";
 const statsDB: any = {};
@@ -64,11 +64,7 @@ statsDB.returnAnswerWord = async (
   else if (gameType === "DAILY") games = user.dailyGames;
   let flag: boolean = false;
   games.forEach((elm: any) => {
-    if (
-      elm._id == gameId &&
-      elm.solved === false &&
-      elm.attempts.letters.length === 6
-    ) {
+    if (elm._id == gameId) {
       flag = true;
       return;
     }

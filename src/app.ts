@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:4200", "https://wordle-api-five.vercel.app"],
+    origin: ["http://localhost:4200", "https://wordle-by-ashar.vercel.app/"],
   })
 );
 app.use(cookieParser());
