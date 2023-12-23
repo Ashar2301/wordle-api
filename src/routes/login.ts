@@ -33,6 +33,7 @@ router.post("/login", async (req: Request, res: Response, next: any) => {
       res.cookie("token", accessToken, {
         httpOnly: true,
         sameSite: "none",
+        secure: true,
         expires: rememberMe
           ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           : undefined,
