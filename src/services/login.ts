@@ -14,4 +14,8 @@ loginService.createUser = async (
   return loginDB.createUser(userEmail, userName, userPassword);
 };
 
+loginService.returnUserCreds = async (userEmail: string) => {
+  return loginDB.returnUserCreds(userEmail);
+};
+
 export default loginService;

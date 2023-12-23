@@ -4,7 +4,7 @@ import jwtService from "../services/jwt.js";
 const router = express.Router();
 router.get("/", jwtService.authenticateToken, async (req, res, next) => {
     try {
-        const email = req.query.email;
+        const email = req.user.email;
         const hardMode = req.query.hardMode;
         let resp = await dailyService.generateGame(email, hardMode);
         const accessToken = jwtService.generateAccessToken({ email });
@@ -17,8 +17,8 @@ router.get("/", jwtService.authenticateToken, async (req, res, next) => {
 });
 router.post("/attempt", jwtService.authenticateToken, async (req, res, next) => {
     try {
-        let resp = await dailyService.registerAttempts(req.body.email, req.body.gameID, req.body.attempt, req.body.attemptNumber);
-        const email = req.body.email;
+        let resp = await dailyService.registerAttempts(req.user.email, req.body.gameID, req.body.attempt, req.body.attemptNumber);
+        const email = req.user.email;
         const accessToken = jwtService.generateAccessToken({ email });
         res.cookie("token", accessToken, { httpOnly: true });
         res.status(200).json(resp.response);

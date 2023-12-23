@@ -39,7 +39,7 @@ loginDB.createUser = async (
     }
 
     const hashedPassword = await bcrypt.hash(userPassword, 10);
-    const data:IUser = {
+    const data: IUser = {
       email: userEmail,
       name: userName,
       password: hashedPassword,
@@ -60,6 +60,23 @@ loginDB.createUser = async (
 loginDB.findUserByEmail = async (userEmail: string) => {
   let model = await collection.getUserCollection();
   return await model.findOne({ email: userEmail });
+};
+
+loginDB.returnUserCreds = async (userEmail: string) => {
+  console.log(userEmail)
+  let user = await loginDB.findUserByEmail(userEmail);
+  console.log(user)
+  if (user) {
+    return {
+      code: 200,
+      response: {
+        email: user.email,
+        name: user.name,
+      },
+    };
+  } else {
+    return { code: 404, response: "User not found" };
+  }
 };
 
 export default loginDB;
