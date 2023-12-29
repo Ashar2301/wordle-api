@@ -9,7 +9,6 @@ router.get(
   jwtService.authenticateToken,
   async (req: IRequest, res: Response, next: any) => {
     try {
-      console.log(req.user.email)
       const email: string = req.user.email;
       let resp = await statsService.getDailyStats(email);
       const accessToken = jwtService.generateAccessToken({ email });

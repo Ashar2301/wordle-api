@@ -37,7 +37,7 @@ router.post("/login", async (req, res, next) => {
 });
 router.get("/test", async (req, res, next) => {
     try {
-        res.status(200).json("Hello World");
+        res.status(200).json("Hello World xd");
     }
     catch (e) {
         next(e);
@@ -52,10 +52,36 @@ router.get("/logout", async (req, res, next) => {
         next(e);
     }
 });
+router.post("/forgotPassword", async (req, res, next) => {
+    try {
+        let response = await loginService.checkIfEmailExists(req.body.email);
+        if (response.code === 200) {
+            let response2 = await loginService.sendResetPasswordEmail(req.body.email);
+            res.status(response2.code).json(response2.response);
+        }
+        else {
+            res.status(response.code).json(response.response);
+        }
+    }
+    catch (e) {
+        next(e);
+    }
+});
+router.get("/validateURL", jwtService.validateTokenFromURL, async (req, res, next) => {
+    try {
+        res.status(200).json({ email: req.user.email });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+router.post("/resetPassword", async (req, res, next) => {
+    let response = await loginService.resetPassword(req.body.email, req.body.password);
+    res.status(response.code).json(response.response);
+});
 router.get("/account", jwtService.authenticateToken, async (req, res, next) => {
     try {
         let response = await loginService.returnUserCreds(req.user.email);
-        console.log(response);
         res.status(response.code).json(response.response);
     }
     catch (e) {

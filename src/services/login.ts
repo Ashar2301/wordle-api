@@ -18,4 +18,16 @@ loginService.returnUserCreds = async (userEmail: string) => {
   return loginDB.returnUserCreds(userEmail);
 };
 
+loginService.checkIfEmailExists = async (userEmail: string) => {
+  return loginDB.checkIfEmailExists(userEmail);
+};
+
+loginService.sendResetPasswordEmail = async (userEmail: string) => {
+  return loginDB.sendResetPasswordEmail(userEmail);
+};
+
+loginService.resetPassword = async (userEmail: string, password: string) => {
+  return loginDB.resetPassword(userEmail, password);
+};
+
 export default loginService;

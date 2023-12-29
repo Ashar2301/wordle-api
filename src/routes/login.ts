@@ -46,7 +46,7 @@ router.post("/login", async (req: Request, res: Response, next: any) => {
 });
 router.get("/test", async (req: Request, res: Response, next: any) => {
   try {
-    res.status(200).json("Hello World");
+    res.status(200).json("Hello World xd");
   } catch (e) {
     next(e);
   }
@@ -61,6 +61,48 @@ router.get("/logout", async (req: Request, res: Response, next: any) => {
   }
 });
 
+router.post(
+  "/forgotPassword",
+  async (req: Request, res: Response, next: any) => {
+    try {
+      let response: ICustomResponse = await loginService.checkIfEmailExists(
+        req.body.email
+      );
+      if (response.code === 200) {
+        let response2: ICustomResponse =
+          await loginService.sendResetPasswordEmail(req.body.email);
+        res.status(response2.code).json(response2.response);
+      } else {
+        res.status(response.code).json(response.response);
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+router.get(
+  "/validateURL",
+  jwtService.validateTokenFromURL,
+  async (req: IRequest, res: Response, next: any) => {
+    try {
+      res.status(200).json({ email: req.user.email });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+router.post(
+  "/resetPassword",
+  async (req: Request, res: Response, next: any) => {
+    let response: ICustomResponse = await loginService.resetPassword(
+      req.body.email,
+      req.body.password
+    );
+
+    res.status(response.code).json(response.response);
+  }
+);
+
 router.get(
   "/account",
   jwtService.authenticateToken,
@@ -69,7 +111,6 @@ router.get(
       let response: ICustomResponse = await loginService.returnUserCreds(
         req.user.email
       );
-      console.log(response);
       res.status(response.code).json(response.response);
     } catch (e) {
       next(e);

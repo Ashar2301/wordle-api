@@ -25,6 +25,7 @@
   "homepage": "https://github.com/Ashar2301/wordle-api#readme",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.6",
+    "nodemailer": "^6.9.7",
     "typescript": "^5.2.2"
   },
   "dependencies": {
