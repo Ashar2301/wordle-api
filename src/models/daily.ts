@@ -1,12 +1,13 @@
 import { words } from "../constants/five-letter-words.js";
 import { IDailyGames, IUserStatistics } from "../interfaces/user-statistics.js";
+import { IUser } from "../interfaces/user.js";
 import collection from "../utils/mongoDB-connection.js";
 const dailyDB: any = {};
 
 dailyDB.generateGame = async (email: string, hardMode: boolean) => {
-  const isRecordExists = await dailyDB.findUserByEmail(email);
+  const isRecordExists:IUser = await dailyDB.findUserByEmail(email);
   if (isRecordExists) {
-    let updateDocument = await dailyDB.updateDailyArray(email, hardMode);
+    let updateDocument:IDailyGames = await dailyDB.updateDailyArray(email, hardMode);
     if (updateDocument) {
       return { code: 200, response: updateDocument };
     } else {
@@ -16,7 +17,7 @@ dailyDB.generateGame = async (email: string, hardMode: boolean) => {
     let document = await dailyDB.addUserFirstDocument(email);
 
     if (document) {
-      let updateDocument = await dailyDB.updateDailyArray(email, hardMode);
+      let updateDocument:IDailyGames = await dailyDB.updateDailyArray(email, hardMode);
       if (updateDocument) {
         return { code: 200, response: updateDocument };
       } else {

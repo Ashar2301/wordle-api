@@ -4,7 +4,7 @@ import { IRequest } from "../interfaces/custom-request.js";
 const jwtService: any = {};
 
 jwtService.generateAccessToken = (user: any) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 };
 jwtService.generateRefreshToken = (user: any) => {
   return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);

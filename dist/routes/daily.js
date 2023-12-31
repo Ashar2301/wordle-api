@@ -9,7 +9,7 @@ router.get("/", jwtService.authenticateToken, async (req, res, next) => {
         let resp = await dailyService.generateGame(email, hardMode);
         const accessToken = jwtService.generateAccessToken({ email });
         res.cookie("token", accessToken, { httpOnly: true });
-        res.status(200).json(resp.response);
+        res.status(resp.code).json(resp.response);
     }
     catch (e) {
         next(e);
@@ -21,7 +21,7 @@ router.post("/attempt", jwtService.authenticateToken, async (req, res, next) => 
         const email = req.user.email;
         const accessToken = jwtService.generateAccessToken({ email });
         res.cookie("token", accessToken, { httpOnly: true });
-        res.status(200).json(resp.response);
+        res.status(resp.code).json(resp.response);
     }
     catch (e) {
         next(e);

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dailyService from "../services/daily.js";
 import jwtService from "../services/jwt.js";
 import { IRequest } from "../interfaces/custom-request.js";
+import { ICustomResponse } from "../interfaces/custom-response.js";
 
 const router = express.Router();
 
@@ -12,10 +13,10 @@ router.get(
     try {
       const email: string = req.user.email;
       const hardMode: string = req.query.hardMode as string;
-      let resp = await dailyService.generateGame(email, hardMode);
+      let resp:ICustomResponse = await dailyService.generateGame(email, hardMode);
       const accessToken = jwtService.generateAccessToken({ email });
       res.cookie("token", accessToken, { httpOnly: true });
-      res.status(200).json(resp.response);
+      res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);
     }
@@ -27,7 +28,7 @@ router.post(
   jwtService.authenticateToken,
   async (req: IRequest, res: Response, next: any) => {
     try {
-      let resp = await dailyService.registerAttempts(
+      let resp:ICustomResponse = await dailyService.registerAttempts(
         req.user.email,
         req.body.gameID,
         req.body.attempt,
@@ -36,7 +37,7 @@ router.post(
       const email: string = req.user.email;
       const accessToken = jwtService.generateAccessToken({ email });
       res.cookie("token", accessToken, { httpOnly: true });
-      res.status(200).json(resp.response);
+      res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);
     }

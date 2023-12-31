@@ -3,14 +3,15 @@ import {
   IRandomGames,
   IUserStatistics,
 } from "../interfaces/user-statistics.js";
+import { IUser } from "../interfaces/user.js";
 import collection from "../utils/mongoDB-connection.js";
 
 const randomDB: any = {};
 
 randomDB.generateGame = async (email: string, hardMode: boolean) => {
-  const isRecordExists = await randomDB.findUserByEmail(email);
+  const isRecordExists:IUser = await randomDB.findUserByEmail(email);
   if (isRecordExists) {
-    let updateDocument = await randomDB.updateRandomArray(email, hardMode);
+    let updateDocument:IRandomGames = await randomDB.updateRandomArray(email, hardMode);
     if (updateDocument) {
       return { code: 200, response: updateDocument };
     } else {
@@ -20,7 +21,7 @@ randomDB.generateGame = async (email: string, hardMode: boolean) => {
     let document = await randomDB.addUserFirstDocument(email);
 
     if (document) {
-      let updateDocument = await randomDB.updateRandomArray(email, hardMode);
+      let updateDocument:IRandomGames = await randomDB.updateRandomArray(email, hardMode);
       if (updateDocument) {
         return { code: 200, response: updateDocument };
       } else {
