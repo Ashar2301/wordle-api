@@ -136,7 +136,7 @@ randomDB.getIndexForWord = async (email: string) => {
   }
 
   return index;
-  // return 6154
+  // return 3318;
 };
 
 randomDB.findUserByEmail = async (userEmail: string) => {
@@ -166,6 +166,7 @@ randomDB.colorTheLetters = (answerWord: string, attempt: any[]) => {
     if (colorArray[index] !== "G" && colorArray[index] !== "R") {
       if (countMap[elm.toLowerCase()] > 0) {
         colorArray[index] = "Y";
+        countMap[elm.toLowerCase()]--;
       } else {
         colorArray[index] = "R";
       }

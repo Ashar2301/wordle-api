@@ -138,6 +138,7 @@ dailyDB.colorTheLetters = (answerWord, attempt) => {
         if (colorArray[index] !== "G" && colorArray[index] !== "R") {
             if (countMap[elm.toLowerCase()] > 0) {
                 colorArray[index] = "Y";
+                countMap[elm.toLowerCase()]--;
             }
             else {
                 colorArray[index] = "R";
