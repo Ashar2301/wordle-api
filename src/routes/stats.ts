@@ -12,8 +12,6 @@ router.get(
     try {
       const email: string = req.user.email;
       let resp:ICustomResponse = await statsService.getDailyStats(email);
-      const accessToken = jwtService.generateAccessToken({ email });
-      res.cookie("token",accessToken,{httpOnly:true});
       res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);
@@ -28,8 +26,6 @@ router.get(
     try {
       const email: string = req.user.email;
       let resp:ICustomResponse = await statsService.getRandomStats(email);
-      const accessToken = jwtService.generateAccessToken({ email });
-      res.cookie("token",accessToken,{httpOnly:true});
       res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);
@@ -46,8 +42,6 @@ router.get(
       const email: string = req.user.email;
       const gameType: string = req.query.gameType as string;
       let resp:ICustomResponse = await statsService.returnAnswerWord(gameId, email, gameType);
-      const accessToken = jwtService.generateAccessToken({ email });
-      res.cookie("token",accessToken,{httpOnly:true});
       res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);

@@ -30,14 +30,17 @@ router.post("/login", async (req: Request, res: Response, next: any) => {
       const accessToken = jwtService.generateAccessToken({
         email,
       });
-      res.cookie("token", accessToken, {
+      const refreshToken = jwtService.generateRefreshToken({
+        email , rememberMe
+      })
+      res.cookie("refreshToken", refreshToken , {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         expires: rememberMe
           ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
           : undefined,
-      });
+      }).header('Authorization',accessToken);
     }
     res.status(response.code).json(response.response);
   } catch (e) {
@@ -54,7 +57,7 @@ router.get("/test", async (req: Request, res: Response, next: any) => {
 
 router.get("/logout", async (req: Request, res: Response, next: any) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("refreshToken");
     res.status(200).json("Logged out");
   } catch (e) {
     next(e);

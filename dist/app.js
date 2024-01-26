@@ -19,7 +19,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(RequestLogger);
 app.use((req, res, next) => {
-    res.header("Access-Control-Expose-Headers", "authorization");
+    res.header("Access-Control-Expose-Headers", "Authorization");
     next();
 });
 app.use("/", loginRoutes);

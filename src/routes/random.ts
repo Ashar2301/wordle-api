@@ -14,8 +14,6 @@ router.get(
       const email: string = req.user.email;
       const hardMode: string = req.query.hardMode as string;
       let resp:ICustomResponse = await randomService.generateGame(email, hardMode);
-      const accessToken = jwtService.generateAccessToken({ email });
-      res.cookie("token", accessToken, { httpOnly: true });
       res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);
@@ -35,8 +33,6 @@ router.post(
         req.body.attemptNumber
       );
       const email: string = req.user.email;
-      const accessToken = jwtService.generateAccessToken({ email });
-      res.cookie("token", accessToken, { httpOnly: true });
       res.status(resp.code).json(resp.response);
     } catch (e) {
       next(e);

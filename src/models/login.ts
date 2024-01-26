@@ -96,7 +96,7 @@ loginDB.findUserByEmail = async (userEmail: string) => {
 };
 
 loginDB.returnUserCreds = async (userEmail: string) => {
-  let user = await loginDB.findUserByEmail(userEmail);
+    let user = await loginDB.findUserByEmail(userEmail);
   if (user) {
     return {
       code: 200,

@@ -2,5 +2,6 @@ export interface IRequest{
     query  ?: any,
     body   ?: any,
     user   ?: any,
-    cookies?: any
+    cookies?: any,
+    headers?: any
 }
