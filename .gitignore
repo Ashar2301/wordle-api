@@ -3,3 +3,7 @@ dist
 ErrorLogger.txt
 RequestLogger.txt
 .vercel
+src/uploads
+
+/uploads
+/dist

@@ -4,4 +4,5 @@ export interface IRequest{
     user   ?: any,
     cookies?: any,
     headers?: any
+    files   ?: any
 }
